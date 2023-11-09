@@ -244,12 +244,12 @@ const Products = () => {
                 </div>
               </div>
             )}
-            {token ? (
+          </Grid>
+          {token ? (
               <Grid items xs={12} md={3}>
                 <Cart />
               </Grid>
             ) : null}
-          </Grid>
         </Grid>
       </div>
       <Footer />

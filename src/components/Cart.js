@@ -133,7 +133,7 @@ const Cart = ({ products, items = [], handleQuantity }) => {
     return (
       <Box className="cart empty">
         <ShoppingCartOutlined className="empty-cart-icon" />
-        <Box color="#e9f5e1" textAlign="center">
+        <Box color="#aaa" textAlign="center">
           Cart is empty. Add more items to the cart to checkout.
         </Box>
       </Box>
@@ -215,11 +215,11 @@ const Cart = ({ products, items = [], handleQuantity }) => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Box color="#e9f5e1" alignSelf="center">
+          <Box color="#3C3C3C" alignSelf="center">
             Order total
           </Box>
           <Box
-            color="#e9f5e1"
+            color="#3C3C3C"
             fontWeight="700"
             fontSize="1.5rem"
             alignSelf="center"
