@@ -6,7 +6,6 @@ import {
 } from "@mui/icons-material";
 import {
   Button,
-  cardActionAreaClasses,
   Grid,
   IconButton,
   Stack,
@@ -15,7 +14,6 @@ import { Box } from "@mui/system";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import "./Cart.css";
-import { tokTypes } from "@babel/core";
 
 // Definition of Data Structures used
 /**
@@ -130,7 +128,7 @@ const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
  *
  */
 const Cart = ({ products, items = [], handleQuantity }) => {
-  console.log(items);
+  console.log(items,products);
   if (!items.length) {
     return (
       <Box className="cart empty">
@@ -217,11 +215,11 @@ const Cart = ({ products, items = [], handleQuantity }) => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Box color="#3C3C3C" alignSelf="center">
+          <Box color="#e9f5e1" alignSelf="center">
             Order total
           </Box>
           <Box
-            color="#3C3C3C"
+            color="#e9f5e1"
             fontWeight="700"
             fontSize="1.5rem"
             alignSelf="center"

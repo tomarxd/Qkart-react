@@ -15,6 +15,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import "./Products.css";
 import ProductCard from "./ProductCard";
+import Cart from "./Cart";
 
 // Definition of Data Structures used
 /**
@@ -72,6 +73,7 @@ const Products = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [timerId, udpateTimerId] = useState("");
   const token = localStorage.getItem("token");
+  console.log(token);
 
   useEffect(() => {
     performAPICall();
@@ -205,40 +207,49 @@ const Products = () => {
           name="search"
           // onChange={(text) => {performSearch(text.target.value);}}
         />
+
         <Grid container>
-          <Grid item className="product-grid">
-            <Box className="hero">
-              <p className="hero-heading">
-                India’s <span className="hero-highlight">FASTEST DELIVERY</span>{" "}
-                to your door step
-              </p>
-            </Box>
-          </Grid>
-          {loading ? (
-            <div className="circular-progress">
-              <div>
-                <CircularProgress />
-              </div>
-              <div>
-                <Typography>Loading Products...</Typography>
-              </div>
-            </div>
-          ) : card.length > 0 ? (
-            <Grid container spacing={2}>
-              {card.map((product) => (
-                <Grid item md={3} xs={6} key={product._id}>
-                  <ProductCard product={product} />
-                </Grid>
-              ))}
+          <Grid item xs={12} md={token ? 9 : 12}>
+            <Grid item className="product-grid">
+              <Box className="hero">
+                <p className="hero-heading">
+                  India’s{" "}
+                  <span className="hero-highlight">FASTEST DELIVERY</span> to
+                  your door step
+                </p>
+              </Box>
             </Grid>
-          ) : (
-            <div className="no-products">
-              <SentimentDissatisfied />
-              <div>
-                <h3>No Products Found</h3>
+            {loading ? (
+              <div className="circular-progress">
+                <div>
+                  <CircularProgress />
+                </div>
+                <div>
+                  <Typography>Loading Products...</Typography>
+                </div>
               </div>
-            </div>
-          )}
+            ) : card.length > 0 ? (
+              <Grid container spacing={2}>
+                {card.map((product) => (
+                  <Grid item md={3} xs={6} key={product._id}>
+                    <ProductCard product={product} />
+                  </Grid>
+                ))}
+              </Grid>
+            ) : (
+              <div className="no-products">
+                <SentimentDissatisfied />
+                <div>
+                  <h3>No Products Found</h3>
+                </div>
+              </div>
+            )}
+            {token ? (
+              <Grid items xs={12} md={3}>
+                <Cart />
+              </Grid>
+            ) : null}
+          </Grid>
         </Grid>
       </div>
       <Footer />
