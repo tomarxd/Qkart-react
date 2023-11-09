@@ -1,6 +1,5 @@
 import {
   AddOutlined,
-  CommitSharp,
   RemoveOutlined,
   ShoppingCart,
   ShoppingCartOutlined,
@@ -136,7 +135,7 @@ const Cart = ({ products, items = [], handleQuantity }) => {
     return (
       <Box className="cart empty">
         <ShoppingCartOutlined className="empty-cart-icon" />
-        <Box color="#aaa" textAlign="center">
+        <Box color="#e9f5e1" textAlign="center">
           Cart is empty. Add more items to the cart to checkout.
         </Box>
       </Box>

@@ -71,6 +71,7 @@ const Products = () => {
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [timerId, udpateTimerId] = useState("");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     performAPICall();
@@ -154,13 +155,12 @@ const Products = () => {
    *
    */
   const debounceSearch = (event, debounceTimeout) => {
-
     clearTimeout(debounceTimeout);
 
     let timerId = setTimeout(() => {
-      performSearch(event)
+      performSearch(event);
     }, 500);
-    udpateTimerId(timerId)
+    udpateTimerId(timerId);
   };
 
   return (
@@ -182,7 +182,9 @@ const Products = () => {
           placeholder="Search for items/categories"
           name="search"
           // onChange={(text) => {performSearch(text.target.value);}}
-          onChange={(e)=>{debounceSearch(e.target.value,timerId)}}
+          onChange={(e) => {
+            debounceSearch(e.target.value, timerId);
+          }}
         />
       </Header>
 
