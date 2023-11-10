@@ -9,29 +9,29 @@ An e-commerce application using ReactJS and Material UI, providing customers wit
 * Checkout functionality
 
 ## Technologies Used
-Front-end: React, HTML, CSS, Javascript
-Notistack: For notifications
-React-router: For routing between different pages
+* Front-end: React, HTML, CSS, Javascript
+* Notistack: For notifications
+* React-router: For routing between different pages
 
 
 ## Installation
-Clone the repository:
+1. Clone the repository:
 
-Navigate to the project directory:
+2. Navigate to the project directory:
 
-Install dependencies:
+3. Install dependencies:
 
-Run server with: npm run start
+4. Run server with: npm run start
 
-Open your web browser and access the application at http://localhost:8081/.
+5. Open your web browser and access the application at http://localhost:8081/.
 
 ## Usage
-Sign up or log in to your account.
-Search products
-Add products to Cart
-Go to Checkout
-Add Address
-Confirm Checkout
+* Sign up or log in to your account.
+* Search products
+* Add products to Cart
+* Go to Checkout
+* Add Address
+* Confirm Checkout
 
 
 ## License
