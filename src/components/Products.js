@@ -76,6 +76,7 @@ const Products = () => {
   console.log(token);
 
   useEffect(() => {
+    fetchCart(token);
     performAPICall();
   }, []);
 
@@ -165,6 +166,58 @@ const Products = () => {
     udpateTimerId(timerId);
   };
 
+  /**
+   * Perform the API call to fetch the user's cart and return the response
+   *
+   * @param {string} token - Authentication token returned on login
+   *
+   * @returns { Array.<{ productId: string, qty: number }> | null }
+   *    The response JSON object
+   *
+   * Example for successful response from backend:
+   * HTTP 200
+   * [
+   *      {
+   *          "productId": "KCRwjF7lN97HnEaY",
+   *          "qty": 3
+   *      },
+   *      {
+   *          "productId": "BW0jAAeDJmlZCF8i",
+   *          "qty": 1
+   *      }
+   * ]
+   *
+   * Example for failed response from backend:
+   * HTTP 401
+   * {
+   *      "success": false,
+   *      "message": "Protected route, Oauth2 Bearer token not found"
+   * }
+   */
+
+  const fetchCart = async (token) => {
+    console.log("fetching cart");
+    if (!token) return;
+    try {
+      const cartFetch = await axios.get(`${config.endpoint}/cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return cartFetch;
+    } catch (e) {
+      if (e.response && e.response.status === 400) {
+        enqueueSnackbar(e.response.message, { variant: "error" });
+      } else {
+        enqueueSnackbar(
+          "Could not fetch cart details. Check that the backend is running, reachable and returns valid JSON.",
+          { variant: "error" }
+        );
+      }
+    }
+    return null;
+  };
+
   return (
     <div>
       <Header>
@@ -246,10 +299,10 @@ const Products = () => {
             )}
           </Grid>
           {token ? (
-              <Grid items xs={12} md={3}>
-                <Cart />
-              </Grid>
-            ) : null}
+            <Grid items xs={12} md={3}>
+              <Cart />
+            </Grid>
+          ) : null}
         </Grid>
       </div>
       <Footer />

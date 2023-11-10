@@ -128,7 +128,7 @@ const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
  *
  */
 const Cart = ({ products, items = [], handleQuantity }) => {
-  console.log(items,products);
+  // console.log(items,products);
   if (!items.length) {
     return (
       <Box className="cart empty">
