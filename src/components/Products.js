@@ -218,6 +218,22 @@ const Products = () => {
     return null;
   };
 
+  // Return if a product already is present in the cart
+  const isItemInCart = (items, productId) => {};
+
+  //Perform the API call to add or update items in the user's cart and update local cart data to display the latest cart
+  const addToCart = async (
+    token,
+    items,
+    products,
+    productId,
+    qty,
+    options = { preventDuplicate: false }
+  ) => {};
+
+  //to get - + buttons of cart items working
+  const handleQuantity = (id, qty) => {};
+
   return (
     <div>
       <Header>

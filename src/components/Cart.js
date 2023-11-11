@@ -65,6 +65,8 @@ export const generateCartItemsFrom = (cartData, productsData) => {
   return nextCart;
 };
 
+const token = localStorage.getItem("token");
+
 /**
  * Get the total value of all products added to the cart
  *
@@ -82,6 +84,8 @@ export const getTotalCartValue = (items = []) => {
   });
   return total.toFixed(2);
 };
+// Implement function to return total cart quantity
+export const getTotalItems = (items = []) => {}
 
 /**
  * Component to display the current quantity for a product and + and - buttons to update product quantity on cart
@@ -178,26 +182,26 @@ const Cart = ({ products, items = [], handleQuantity }) => {
                     alignItems="center"
                   >
                     <ItemQuantity
-                      // Add required props by checking implementation
-                      // handleAdd={async () => {
-                      //   await handleQuantity(
-                      //     token,
-                      //     items,
-                      //     products,
-                      //     item.productId,
-                      //     item.qty + 1
-                      //   );
-                      // }}
-                      // handleDelete={async () => {
-                      //   await handleQuantity(
-                      //     token,
-                      //     items,
-                      //     products,
-                      //     item.productId,
-                      //     item.qty - 1
-                      //   );
-                      // }}
-                      // value={item.qty}
+                      Add required props by checking implementation
+                      handleAdd={async () => {
+                        await handleQuantity(
+                          token,
+                          items,
+                          products,
+                          item.productId,
+                          item.qty + 1
+                        );
+                      }}
+                      handleDelete={async () => {
+                        await handleQuantity(
+                          token,
+                          items,
+                          products,
+                          item.productId,
+                          item.qty - 1
+                        );
+                      }}
+                      value={item.qty}
                     />
                     <Box padding="0.5rem" fontWeight="700">
                       ${item.cost}
