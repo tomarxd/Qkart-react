@@ -73,7 +73,7 @@ const Products = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [timerId, udpateTimerId] = useState("");
   const token = localStorage.getItem("token");
-  console.log(token);
+  // console.log(token);
 
   useEffect(() => {
     fetchCart(token);
@@ -204,6 +204,7 @@ const Products = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log("Cart data: ", cartFetch);
       return cartFetch;
     } catch (e) {
       if (e.response && e.response.status === 400) {
@@ -219,7 +220,15 @@ const Products = () => {
   };
 
   // Return if a product already is present in the cart
-  const isItemInCart = (items, productId) => {};
+  const isItemInCart = (items, productId) => {
+    let itemMatch = false;
+    console.log("itInC", items);
+    console.log("itInC", productId);
+    items.forEach((products) => {
+      if (products._id === productId) itemMatch = true;
+    });
+    return itemMatch;
+  };
 
   //Perform the API call to add or update items in the user's cart and update local cart data to display the latest cart
   const addToCart = async (
@@ -229,7 +238,9 @@ const Products = () => {
     productId,
     qty,
     options = { preventDuplicate: false }
-  ) => {};
+  ) => {
+    // console.log(token, items, products, productId, qty, options);
+  };
 
   //to get - + buttons of cart items working
   const handleQuantity = (id, qty) => {};

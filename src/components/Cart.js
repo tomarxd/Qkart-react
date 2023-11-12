@@ -4,12 +4,7 @@ import {
   ShoppingCart,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
-import {
-  Button,
-  Grid,
-  IconButton,
-  Stack,
-} from "@mui/material";
+import { Button, Grid, IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -85,7 +80,14 @@ export const getTotalCartValue = (items = []) => {
   return total.toFixed(2);
 };
 // Implement function to return total cart quantity
-export const getTotalItems = (items = []) => {}
+export const getTotalItems = (items = []) => {
+  let totalItems = 0;
+  items.forEach((element) => {
+    totalItems += element.qty;
+    console.log(totalItems);
+    return totalItems;
+  });
+};
 
 /**
  * Component to display the current quantity for a product and + and - buttons to update product quantity on cart
@@ -182,7 +184,12 @@ const Cart = ({ products, items = [], handleQuantity }) => {
                     alignItems="center"
                   >
                     <ItemQuantity
-                      Add required props by checking implementation
+                      Add
+                      required
+                      props
+                      by
+                      checking
+                      implementation
                       handleAdd={async () => {
                         await handleQuantity(
                           token,
@@ -249,4 +256,3 @@ const Cart = ({ products, items = [], handleQuantity }) => {
 };
 
 export default Cart;
-  
