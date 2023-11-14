@@ -135,6 +135,16 @@ const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
  */
 const Cart = ({ products, items = [], handleQuantity }) => {
   // console.log(items,products);
+  // const history = useHistory();
+  // const routeToCheckout =() =>{
+  // history("/checkout")
+  // }
+    //get total quantity of items
+    const quantity = getTotalItems(items);
+    console.log(quantity);
+    //total cost of items
+    const totalCost = getTotalCartValue(items);
+    console.log(totalCost);
   if (!items.length) {
     return (
       <Box className="cart empty">

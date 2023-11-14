@@ -15,7 +15,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import "./Products.css";
 import ProductCard from "./ProductCard";
-import Cart from "./Cart";
+import Cart, { generateCartItemsFrom } from "./Cart";
 
 // Definition of Data Structures used
 /**
@@ -67,17 +67,24 @@ const Products = () => {
    *      "message": "Something went wrong. Check the backend console for more details"
    * }
    */
-
+  //storing all products
   const [card, setCard] = useState([]);
+  //made for loading animation
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  //made for timer to debounce search
   const [timerId, udpateTimerId] = useState("");
+  //storing token in variable
   const token = localStorage.getItem("token");
+  //storing cart in a state
+  const [cartItems, setCartItems] = useState([]);
   // console.log(token);
 
   useEffect(() => {
-    fetchCart(token);
-    performAPICall();
+      performAPICall();
+      if(token) {
+        fetchCart(token);
+      }
   }, []);
 
   const productsURL = config.endpoint + "/products";
@@ -240,10 +247,51 @@ const Products = () => {
     options = { preventDuplicate: false }
   ) => {
     // console.log(token, items, products, productId, qty, options);
+    if (!token) {
+      enqueueSnackbar("Login to add an item to the Cart", {
+        variant: "warning",
+      });
+      return;
+    }
+
+    if (options.preventDuplicate && isItemInCart(items, productId)) {
+      enqueueSnackbar(
+        "Item already in cart. Use the cart sidebar to update quantity or remove item.",
+        { variant: "warning" }
+      );
+      return;
+    } else {
+      try {
+        console.log("post req start");
+
+        const response = await axios.post(
+          `${config.endpoint}/cart`,
+          { productId, qty },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const newCartItems = generateCartItemsFrom(response.data, products);
+        setCartItems(newCartItems);
+      } catch (error) {
+        if (error.response) {
+          enqueueSnackbar(error.response.data.message, { variant: "error" });
+        } else {
+          enqueueSnackbar(
+            "Could not fetch products. Check that the backend is running, reachable and return valid JSON.",
+            { variant: "error" }
+          );
+        }
+      }
+    }
   };
 
   //to get - + buttons of cart items working
-  const handleQuantity = (id, qty) => {};
+  const handleQuantity = (id, qty) => {
+    addToCart(token, cartItems, card, id, qty);
+  };
 
   return (
     <div>
@@ -312,7 +360,14 @@ const Products = () => {
               <Grid container spacing={2}>
                 {card.map((product) => (
                   <Grid item md={3} xs={6} key={product._id}>
-                    <ProductCard product={product} />
+                    <ProductCard
+                      product={product}
+                      handleAddToCart={() => {
+                        addToCart(token, cartItems, card, product._id, 1, {
+                          preventDuplicate: true,
+                        });
+                      }}
+                    />
                   </Grid>
                 ))}
               </Grid>
@@ -327,7 +382,11 @@ const Products = () => {
           </Grid>
           {token ? (
             <Grid items xs={12} md={3}>
-              <Cart />
+              <Cart
+                products={card}
+                items={cartItems}
+                handleQuantity={handleQuantity}
+              />
             </Grid>
           ) : null}
         </Grid>

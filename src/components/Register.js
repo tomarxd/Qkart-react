@@ -53,7 +53,7 @@ const Register = () => {
 
   const url = config.endpoint + `/auth/register`;
 
-  const register = async (formData) => {
+  const register = async () => {
     if (validateInput(data)) {
       setLoading(false);
       await axios

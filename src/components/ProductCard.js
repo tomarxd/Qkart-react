@@ -28,10 +28,10 @@ const ProductCard = ({ product, handleAddToCart }) => {
         <Typography sx={{fontWeight:"bold", m:1}}>${product.cost}</Typography>
         <Rating value={product.rating} readOnly />
         <CardActions className="card-actions" style={{ justifyContent: "center" }}>
-          <Button className="card-button" onClick={()=>handleAddToCart} fullWidth variant="contained">
+          <Button className="card-button" onClick={()=>handleAddToCart(product._id)} fullWidth variant="contained">
             {" "}
             <AddShoppingCartOutlined />
-            Add to cart
+            Add to cart 
           </Button>
         </CardActions>
       </CardContent>
