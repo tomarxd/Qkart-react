@@ -81,10 +81,10 @@ const Products = () => {
   // console.log(token);
 
   useEffect(() => {
-      performAPICall();
-      if(token) {
-        fetchCart(token);
-      }
+    performAPICall();
+    if (token) {
+      fetchCart(token);
+    }
   }, []);
 
   const productsURL = config.endpoint + "/products";

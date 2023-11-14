@@ -9,7 +9,6 @@ import { Box } from "@mui/system";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import "./Cart.css";
-
 // Definition of Data Structures used
 /**
  * @typedef {Object} Product - Data on product available to buy
@@ -60,7 +59,7 @@ export const generateCartItemsFrom = (cartData, productsData) => {
   return nextCart;
 };
 
-const token = localStorage.getItem("token");
+// const token = localStorage.getItem("token");
 
 /**
  * Get the total value of all products added to the cart
@@ -134,17 +133,19 @@ const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
  *
  */
 const Cart = ({ products, items = [], handleQuantity }) => {
-  // console.log(items,products);
+  const history = useHistory();
+  console.log(products);
+  // console.log(items,productsco);
   // const history = useHistory();
   // const routeToCheckout =() =>{
   // history("/checkout")
   // }
-    //get total quantity of items
-    const quantity = getTotalItems(items);
-    console.log(quantity);
-    //total cost of items
-    const totalCost = getTotalCartValue(items);
-    console.log(totalCost);
+  //get total quantity of items
+  const quantity = getTotalItems(items);
+  console.log(quantity);
+  //total cost of items
+  const totalCost = getTotalCartValue(items);
+  console.log(totalCost);
   if (!items.length) {
     return (
       <Box className="cart empty">
@@ -201,22 +202,10 @@ const Cart = ({ products, items = [], handleQuantity }) => {
                       checking
                       implementation
                       handleAdd={async () => {
-                        await handleQuantity(
-                          token,
-                          items,
-                          products,
-                          item.productId,
-                          item.qty + 1
-                        );
+                        await handleQuantity(item.productId, item.qty + 1);
                       }}
                       handleDelete={async () => {
-                        await handleQuantity(
-                          token,
-                          items,
-                          products,
-                          item.productId,
-                          item.qty - 1
-                        );
+                        await handleQuantity(item.productId, item.qty - 1);
                       }}
                       value={item.qty}
                     />
@@ -256,6 +245,9 @@ const Cart = ({ products, items = [], handleQuantity }) => {
             variant="contained"
             startIcon={<ShoppingCart />}
             className="checkout-btn"
+            onClick={() => {
+              history.push("/checkout");
+            }}
           >
             Checkout
           </Button>
