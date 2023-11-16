@@ -84,6 +84,7 @@ const Products = () => {
     performAPICall();
     if (token) {
       fetchCart(token);
+      generateCartItemsFrom(cartItems, card);
     }
   }, []);
 
@@ -210,7 +211,8 @@ const Products = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
+      // setCartItems(cartFetch)
+      }); 
       console.log("Cart data: ", cartFetch);
       return cartFetch;
     } catch (e) {
@@ -246,6 +248,7 @@ const Products = () => {
     qty,
     options = { preventDuplicate: false }
   ) => {
+    console.log("addToCart");
     // console.log(token, items, products, productId, qty, options);
     if (!token) {
       enqueueSnackbar("Login to add an item to the Cart", {
@@ -290,6 +293,7 @@ const Products = () => {
 
   //to get - + buttons of cart items working
   const handleQuantity = (id, qty) => {
+    console.log("handleQuantity");
     addToCart(token, cartItems, card, id, qty);
   };
 
@@ -333,7 +337,9 @@ const Products = () => {
           }}
           placeholder="Search for items/categories"
           name="search"
-          // onChange={(text) => {performSearch(text.target.value);}}
+          onChange={(text) => {
+            performSearch(text.target.value);
+          }}
         />
 
         <Grid container>

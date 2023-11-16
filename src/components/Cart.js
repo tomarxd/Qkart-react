@@ -47,16 +47,37 @@ import "./Cart.css";
  *
  */
 export const generateCartItemsFrom = (cartData, productsData) => {
+  console.log("generateCartItemsFrom");
   // console.log("Cart Data",cartData);
   // console.log("Products Data",productsData);
-  if (!cartData) return;
+  // if (!cartData) return;
 
-  const nextCart = cartData.map((item) => ({
-    ...item,
-    ...productsData.find((product) => item.productId === product._id),
-  }));
-  // console.log("Gen cart items", nextCart);
-  return nextCart;
+  // const nextCart = cartData.map((item) => ({
+  //   ...item,
+  //   ...productsData.find((product) => item.productId === product._id),
+  // }));
+  // // console.log("Gen cart items", nextCart);
+  // return nextCart;
+  console.log("cartData", cartData);
+
+  const productsInCart = [];
+  cartData?.map((item) => {
+    productsData.map((product) => {
+      if (product._id === item.productId) {
+        const data = {
+          ...item,
+          name: product.name,
+          category: product.category,
+          cost: product.cost,
+          rating: product.rating,
+          image: product.image,
+          _id: product._id,
+        };
+        productsInCart.push(data);
+      }
+    });
+  });
+  return productsInCart;
 };
 
 // const token = localStorage.getItem("token");
@@ -72,20 +93,23 @@ export const generateCartItemsFrom = (cartData, productsData) => {
  *
  */
 export const getTotalCartValue = (items = []) => {
+  console.log("getTotalCartValue");
   let total = 0;
   items.forEach((element) => {
     total += element.cost * element.qty;
   });
   return total.toFixed(2);
 };
+
 // Implement function to return total cart quantity
 export const getTotalItems = (items = []) => {
+  console.log("getTotalItems");
   let totalItems = 0;
-  items.forEach((element) => {
-    totalItems += element.qty;
-    console.log(totalItems);
-    return totalItems;
+  items.map((prod) => {
+    totalItems += prod.qty;
   });
+  console.log(totalItems);
+  return totalItems;
 };
 
 /**
@@ -102,22 +126,31 @@ export const getTotalItems = (items = []) => {
  *
  *
  */
+// * Component to display the current quantity for a product and + and - buttons to update product quantity on cart
 const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
-  return (
-    <Stack direction="row" alignItems="center">
-      <IconButton size="small" color="primary" onClick={handleDelete}>
-        <RemoveOutlined />
-      </IconButton>
+  console.log("ItemQuantity");
+  if (!handleAdd) {
+    return (
       <Box padding="0.5rem" data-testid="item-qty">
-        {value}
+        Qty: {value}
       </Box>
-      <IconButton size="small" color="primary" onClick={handleAdd}>
-        <AddOutlined />
-      </IconButton>
-    </Stack>
-  );
+    );
+  } else {
+    return (
+      <Stack direction="row" alignItems="center">
+        <IconButton size="small" color="primary" onClick={handleDelete}>
+          <RemoveOutlined />
+        </IconButton>
+        <Box padding="0.5rem" data-testid="item-qty">
+          {value}
+        </Box>
+        <IconButton size="small" color="primary" onClick={handleAdd}>
+          <AddOutlined />
+        </IconButton>
+      </Stack>
+    );
+  }
 };
-
 /**
  * Component to display the Cart view
  *
@@ -135,17 +168,15 @@ const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
 const Cart = ({ products, items = [], handleQuantity }) => {
   const history = useHistory();
   console.log(products);
-  // console.log(items,productsco);
-  // const history = useHistory();
-  // const routeToCheckout =() =>{
-  // history("/checkout")
-  // }
+  console.log(items);
+
   //get total quantity of items
   const quantity = getTotalItems(items);
   console.log(quantity);
   //total cost of items
   const totalCost = getTotalCartValue(items);
   console.log(totalCost);
+
   if (!items.length) {
     return (
       <Box className="cart empty">
@@ -247,6 +278,7 @@ const Cart = ({ products, items = [], handleQuantity }) => {
             className="checkout-btn"
             onClick={() => {
               history.push("/checkout");
+              console.log("Checked out succesfully")
             }}
           >
             Checkout
