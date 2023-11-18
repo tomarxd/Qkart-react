@@ -78,14 +78,16 @@ const Products = () => {
   const token = localStorage.getItem("token");
   //storing cart in a state
   const [cartItems, setCartItems] = useState([]);
-  // console.log(token);
 
   useEffect(() => {
-    performAPICall();
-    if (token) {
-      fetchCart(token);
-      generateCartItemsFrom(cartItems, card);
+    async function onLoad() {
+      const allProducts = await performAPICall();
+      if (token) {
+        fetchCart(token);
+        generateCartItemsFrom(cartItems, allProducts);
+      }
     }
+    onLoad();
   }, []);
 
   const productsURL = config.endpoint + "/products";
@@ -211,9 +213,10 @@ const Products = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      // setCartItems(cartFetch)
-      }); 
-      console.log("Cart data: ", cartFetch);
+      });
+    //  let newcartFetch = cartFetch.data;
+    //  setCartItems(newcartFetch);
+    //   console.log("Cart data: ", newcartFetch);
       return cartFetch;
     } catch (e) {
       if (e.response && e.response.status === 400) {
@@ -224,8 +227,8 @@ const Products = () => {
           { variant: "error" }
         );
       }
+      return null;
     }
-    return null;
   };
 
   // Return if a product already is present in the cart
@@ -256,7 +259,6 @@ const Products = () => {
       });
       return;
     }
-
     if (options.preventDuplicate && isItemInCart(items, productId)) {
       enqueueSnackbar(
         "Item already in cart. Use the cart sidebar to update quantity or remove item.",
@@ -276,8 +278,11 @@ const Products = () => {
             },
           }
         );
+        console.log("response by add to cart", response);
         const newCartItems = generateCartItemsFrom(response.data, products);
         setCartItems(newCartItems);
+        console.log("newCartItems by add to cart", newCartItems);
+        return newCartItems;
       } catch (error) {
         if (error.response) {
           enqueueSnackbar(error.response.data.message, { variant: "error" });
@@ -342,7 +347,7 @@ const Products = () => {
           }}
         />
 
-        <Grid container>
+        <Grid item container>
           <Grid item xs={12} md={token ? 9 : 12}>
             <Grid item className="product-grid">
               <Box className="hero">
@@ -387,7 +392,7 @@ const Products = () => {
             )}
           </Grid>
           {token ? (
-            <Grid items xs={12} md={3}>
+            <Grid item xs={12} md={3}>
               <Cart
                 products={card}
                 items={cartItems}

@@ -47,19 +47,7 @@ import "./Cart.css";
  *
  */
 export const generateCartItemsFrom = (cartData, productsData) => {
-  console.log("generateCartItemsFrom");
-  // console.log("Cart Data",cartData);
-  // console.log("Products Data",productsData);
-  // if (!cartData) return;
-
-  // const nextCart = cartData.map((item) => ({
-  //   ...item,
-  //   ...productsData.find((product) => item.productId === product._id),
-  // }));
-  // // console.log("Gen cart items", nextCart);
-  // return nextCart;
   console.log("cartData", cartData);
-
   const productsInCart = [];
   cartData?.map((item) => {
     productsData.map((product) => {
