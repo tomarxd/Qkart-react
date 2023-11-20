@@ -81,10 +81,9 @@ const Products = () => {
 
   useEffect(() => {
     async function onLoad() {
-      const allProducts = await performAPICall();
+      await performAPICall();
       if (token) {
         fetchCart(token);
-        generateCartItemsFrom(cartItems, allProducts);
       }
     }
     onLoad();
@@ -206,7 +205,7 @@ const Products = () => {
    */
 
   const fetchCart = async (token) => {
-    console.log("fetching cart");
+    console.log("fetching cart start");
     if (!token) return;
     try {
       const cartFetch = await axios.get(`${config.endpoint}/cart`, {
@@ -214,10 +213,9 @@ const Products = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-    //  let newcartFetch = cartFetch.data;
-    //  setCartItems(newcartFetch);
-    //   console.log("Cart data: ", newcartFetch);
-      return cartFetch;
+      const newFetchedItems = cartFetch.data;
+      console.log("fetching cart end");
+      return newFetchedItems;
     } catch (e) {
       if (e.response && e.response.status === 400) {
         enqueueSnackbar(e.response.message, { variant: "error" });
@@ -268,7 +266,6 @@ const Products = () => {
     } else {
       try {
         console.log("post req start");
-
         const response = await axios.post(
           `${config.endpoint}/cart`,
           { productId, qty },
@@ -280,8 +277,8 @@ const Products = () => {
         );
         console.log("response by add to cart", response);
         const newCartItems = generateCartItemsFrom(response.data, products);
+        // const newCartItems = response.data;
         setCartItems(newCartItems);
-        console.log("newCartItems by add to cart", newCartItems);
         return newCartItems;
       } catch (error) {
         if (error.response) {

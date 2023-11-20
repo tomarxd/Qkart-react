@@ -47,7 +47,6 @@ import "./Cart.css";
  *
  */
 export const generateCartItemsFrom = (cartData, productsData) => {
-  console.log("cartData", cartData);
   const productsInCart = [];
   cartData?.map((item) => {
     productsData.map((product) => {
@@ -81,7 +80,6 @@ export const generateCartItemsFrom = (cartData, productsData) => {
  *
  */
 export const getTotalCartValue = (items = []) => {
-  console.log("getTotalCartValue");
   let total = 0;
   items.forEach((element) => {
     total += element.cost * element.qty;
@@ -91,12 +89,10 @@ export const getTotalCartValue = (items = []) => {
 
 // Implement function to return total cart quantity
 export const getTotalItems = (items = []) => {
-  console.log("getTotalItems");
   let totalItems = 0;
   items.map((prod) => {
     totalItems += prod.qty;
   });
-  console.log(totalItems);
   return totalItems;
 };
 
@@ -116,7 +112,6 @@ export const getTotalItems = (items = []) => {
  */
 // * Component to display the current quantity for a product and + and - buttons to update product quantity on cart
 const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
-  console.log("ItemQuantity");
   if (!handleAdd) {
     return (
       <Box padding="0.5rem" data-testid="item-qty">
@@ -157,14 +152,10 @@ const Cart = ({ products, items = [], handleQuantity }) => {
   const history = useHistory();
   console.log(products);
   console.log(items);
-
   //get total quantity of items
-  const quantity = getTotalItems(items);
-  console.log(quantity);
+  // const quantity = getTotalItems(items);
   //total cost of items
-  const totalCost = getTotalCartValue(items);
-  console.log(totalCost);
-
+  // const totalCost = getTotalCartValue(items);
   if (!items.length) {
     return (
       <Box className="cart empty">
@@ -266,7 +257,7 @@ const Cart = ({ products, items = [], handleQuantity }) => {
             className="checkout-btn"
             onClick={() => {
               history.push("/checkout");
-              console.log("Checked out succesfully")
+              console.log("Checked out succesfully");
             }}
           >
             Checkout
