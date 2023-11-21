@@ -84,7 +84,7 @@ export const getTotalCartValue = (items = []) => {
   items.forEach((element) => {
     total += element.cost * element.qty;
   });
-  return total.toFixed(2);
+  return total;
 };
 
 // Implement function to return total cart quantity
@@ -150,8 +150,8 @@ const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
  */
 const Cart = ({ products, items = [], handleQuantity }) => {
   const history = useHistory();
-  console.log(products);
-  console.log(items);
+  // console.log(products);
+  // console.log(items);
   //get total quantity of items
   // const quantity = getTotalItems(items);
   //total cost of items

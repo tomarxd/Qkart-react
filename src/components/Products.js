@@ -78,16 +78,10 @@ const Products = () => {
   const token = localStorage.getItem("token");
   //storing cart in a state
   const [cartItems, setCartItems] = useState([]);
-
-  useEffect(() => {
-    async function onLoad() {
-      await performAPICall();
-      if (token) {
-        fetchCart(token);
-      }
-    }
-    onLoad();
-  }, []);
+  //state to update cart
+  const [cartData, setCartData] = useState([]);
+  //all prods
+  let products = null;
 
   const productsURL = config.endpoint + "/products";
 
@@ -98,6 +92,9 @@ const Products = () => {
       .then((response) => {
         setCard(response.data);
         setLoading(false);
+        console.log(response.data);
+        products = response.data;
+        return response.data;
       })
       .catch((error) => {
         setLoading(false);
@@ -135,8 +132,9 @@ const Products = () => {
     await axios
       .get(searchUrl)
       .then((response) => {
-        setCard(response.data);
-        console.log(response.data);
+        const products = response.data;
+        setCard(products);
+        console.log(products);
         setLoading(false);
       })
       .catch((error) => {
@@ -174,6 +172,22 @@ const Products = () => {
     }, 500);
     udpateTimerId(timerId);
   };
+
+  useEffect(() => {
+    async function onLoad() {
+      performAPICall();
+      console.log(products);
+      if (token) {
+        // fetchCart(token);
+        const cartDetails = await fetchCart(token);
+        console.log(cartDetails);
+        setCartItems(cartDetails);
+        const newcartData = await generateCartItemsFrom(cartDetails, products);
+        setCartData(newcartData);
+      }
+    }
+    onLoad();
+  }, []);
 
   /**
    * Perform the API call to fetch the user's cart and return the response
@@ -214,7 +228,6 @@ const Products = () => {
         },
       });
       const newFetchedItems = cartFetch.data;
-      console.log("fetching cart end");
       return newFetchedItems;
     } catch (e) {
       if (e.response && e.response.status === 400) {
@@ -275,10 +288,9 @@ const Products = () => {
             },
           }
         );
-        console.log("response by add to cart", response);
+        console.log("response by add to cart", response.data);
         const newCartItems = generateCartItemsFrom(response.data, products);
-        // const newCartItems = response.data;
-        setCartItems(newCartItems);
+        setCartData(newCartItems);
         return newCartItems;
       } catch (error) {
         if (error.response) {
@@ -296,7 +308,7 @@ const Products = () => {
   //to get - + buttons of cart items working
   const handleQuantity = (id, qty) => {
     console.log("handleQuantity");
-    addToCart(token, cartItems, card, id, qty);
+    addToCart(token, cartData, card, id, qty);
   };
 
   return (
@@ -371,7 +383,7 @@ const Products = () => {
                     <ProductCard
                       product={product}
                       handleAddToCart={() => {
-                        addToCart(token, cartItems, card, product._id, 1, {
+                        addToCart(token, cartData, card, product._id, 1, {
                           preventDuplicate: true,
                         });
                       }}
@@ -392,7 +404,7 @@ const Products = () => {
             <Grid item xs={12} md={3}>
               <Cart
                 products={card}
-                items={cartItems}
+                items={cartData}
                 handleQuantity={handleQuantity}
               />
             </Grid>
