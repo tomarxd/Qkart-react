@@ -4,6 +4,7 @@ import {
   Divider,
   Grid,
   Stack,
+  Table,
   TextField,
   Typography,
 } from "@mui/material";
@@ -13,7 +14,7 @@ import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { config } from "../App";
-import Cart, { getTotalCartValue, generateCartItemsFrom } from "./Cart";
+import Cart, { getTotalCartValue, generateCartItemsFrom, getTotalItems } from "./Cart";
 import "./Checkout.css";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -472,6 +473,31 @@ const Checkout = () => {
         </Grid>
         <Grid item xs={12} md={3} bgcolor="#E9F5E1">
           <Cart isReadOnly products={products} items={items} />
+          <Grid item bgcolor="#ffffff">
+            <Typography variant="h4" fontWeight="800" >Order Details</Typography>
+            <br/>
+                <Table>
+                  <tr>
+                    <td>Products</td>
+                    <td>{getTotalItems(items  )}</td>
+                  </tr>
+                  <br/>
+                  <tr>
+                    <td>Subtotal</td>
+                    <td>${getTotalCartValue(items)}</td>
+                  </tr>
+                  <br/>
+                  <tr>
+                    <td>Shipping Charges</td>
+                    <td>$0</td>
+                  </tr>
+                  <br/>
+                  <tr>
+                    <td><h3>Total</h3></td>
+                    <td><h3>${getTotalCartValue(items)}</h3></td>
+                  </tr>
+                </Table>
+          </Grid>
         </Grid>
       </Grid>
       <Footer />
