@@ -14,7 +14,11 @@ import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { config } from "../App";
-import Cart, { getTotalCartValue, generateCartItemsFrom, getTotalItems } from "./Cart";
+import Cart, {
+  getTotalCartValue,
+  generateCartItemsFrom,
+  getTotalItems,
+} from "./Cart";
 import "./Checkout.css";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -84,6 +88,7 @@ import Header from "./Header";
  *    JSX for the Add new address view
  *
  */
+
 const AddNewAddressView = ({
   token,
   newAddress,
@@ -98,16 +103,8 @@ const AddNewAddressView = ({
         placeholder="Enter your complete address"
       />
       <Stack direction="row" my="1rem">
-        <Button
-          variant="contained"
-        >
-          Add
-        </Button>
-        <Button
-          variant="text"
-        >
-          Cancel
-        </Button>
+        <Button variant="contained">Add</Button>
+        <Button variant="text">Cancel</Button>
       </Stack>
     </Box>
   );
@@ -254,7 +251,6 @@ const Checkout = () => {
   const addAddress = async (token, newAddress) => {
     try {
       // TODO: CRIO_TASK_MODULE_CHECKOUT - Add new address to the backend and display the latest list of addresses
-
     } catch (e) {
       if (e.response) {
         enqueueSnackbar(e.response.data.message, { variant: "error" });
@@ -306,7 +302,6 @@ const Checkout = () => {
   const deleteAddress = async (token, addressId) => {
     try {
       // TODO: CRIO_TASK_MODULE_CHECKOUT - Delete selected address from the backend and display the latest list of addresses
-
     } catch (e) {
       if (e.response) {
         enqueueSnackbar(e.response.data.message, { variant: "error" });
@@ -346,8 +341,7 @@ const Checkout = () => {
    *    Whether validation passed or not
    *
    */
-  const validateRequest = (items, addresses) => {
-  };
+  const validateRequest = (items, addresses) => {};
 
   // TODO: CRIO_TASK_MODULE_CHECKOUT
   /**
@@ -381,11 +375,11 @@ const Checkout = () => {
    * }
    *
    */
-  const performCheckout = async (token, items, addresses) => {
-  };
+
+  
+  const performCheckout = async (token, items, addresses) => {};
 
   // TODO: CRIO_TASK_MODULE_CHECKOUT - Fetch addressses if logged in, otherwise show info message and redirect to Products page
-
 
   // Fetch products and cart data on page load
   useEffect(() => {
@@ -420,31 +414,31 @@ const Checkout = () => {
             <Divider />
             <Box>
               {/* TODO: CRIO_TASK_MODULE_CHECKOUT - Display list of addresses and corresponding "Delete" buttons, if present, of which 1 can be selected */}
-               <Typography my="1rem">
-                 No addresses found for this account. Please add one to proceed
-               </Typography>
+              <Typography my="1rem">
+                No addresses found for this account. Please add one to proceed
+              </Typography>
             </Box>
 
             {/* TODO: CRIO_TASK_MODULE_CHECKOUT - Dislay either "Add new address" button or the <AddNewAddressView> component to edit the currently selected address */}
             <Button
-                color="primary"
-                variant="contained"
-                id="add-new-btn"
-                size="large"
-                onClick={() => {
-                  setNewAddress((currNewAddress) => ({
-                    ...currNewAddress,
-                    isAddingNewAddress: true,
-                  }));
-                }}
-              >
-                Add new address
+              color="primary"
+              variant="contained"
+              id="add-new-btn"
+              size="large"
+              onClick={() => {
+                setNewAddress((currNewAddress) => ({
+                  ...currNewAddress,
+                  isAddingNewAddress: true,
+                }));
+              }}
+            >
+              Add new address
             </Button>
             <AddNewAddressView
-                token={token}
-                newAddress={newAddress}
-                handleNewAddress={setNewAddress}
-                addAddress={addAddress}
+              token={token}
+              newAddress={newAddress}
+              handleNewAddress={setNewAddress}
+              addAddress={addAddress}
             />
 
             <Typography color="#3C3C3C" variant="h4" my="1rem">
@@ -463,41 +457,46 @@ const Checkout = () => {
               </Typography>
             </Box>
 
-            <Button
-              startIcon={<CreditCard />}
-              variant="contained"
-            >
+            <Button startIcon={<CreditCard />} variant="contained">
               PLACE ORDER
             </Button>
           </Box>
         </Grid>
         <Grid item xs={12} md={3} bgcolor="#E9F5E1">
           <Cart isReadOnly products={products} items={items} />
-          <Grid item bgcolor="#ffffff">
-            <Typography variant="h4" fontWeight="800" >Order Details</Typography>
-            <br/>
-                <Table>
-                  <tr>
-                    <td>Products</td>
-                    <td>{getTotalItems(items  )}</td>
-                  </tr>
-                  <br/>
-                  <tr>
-                    <td>Subtotal</td>
-                    <td>${getTotalCartValue(items)}</td>
-                  </tr>
-                  <br/>
-                  <tr>
-                    <td>Shipping Charges</td>
-                    <td>$0</td>
-                  </tr>
-                  <br/>
-                  <tr>
-                    <td><h3>Total</h3></td>
-                    <td><h3>${getTotalCartValue(items)}</h3></td>
-                  </tr>
-                </Table>
-          </Grid>
+          <Box p={1}>
+            <Grid item bgcolor="#ffffff">
+              <Typography variant="h4" fontWeight="800">
+                Order Details
+              </Typography>
+              <br />
+              <Table>
+                <tr>
+                  <td>Products</td>
+                  <td>{getTotalItems(items)}</td>
+                </tr>
+                <br />
+                <tr>
+                  <td>Subtotal</td>
+                  <td>${getTotalCartValue(items)}</td>
+                </tr>
+                <br />
+                <tr>
+                  <td>Shipping Charges</td>
+                  <td>$0</td>
+                </tr>
+                <br />
+                <tr>
+                  <td>
+                    <h3>Total</h3>
+                  </td>
+                  <td>
+                    <h3>${getTotalCartValue(items)}</h3>
+                  </td>
+                </tr>
+              </Table>
+            </Grid>
+          </Box>
         </Grid>
       </Grid>
       <Footer />

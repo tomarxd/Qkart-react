@@ -4,7 +4,7 @@ import {
   ShoppingCart,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
-import { Button, Grid, IconButton, Stack } from "@mui/material";
+import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -148,14 +148,8 @@ const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
  *
  *
  */
-const Cart = ({ products, items = [], handleQuantity }) => {
+const Cart = ({ products, items = [], handleQuantity, isReadOnly = false }) => {
   const history = useHistory();
-  // console.log(products);
-  // console.log(items);
-  //get total quantity of items
-  // const quantity = getTotalItems(items);
-  //total cost of items
-  // const totalCost = getTotalCartValue(items);
   if (!items.length) {
     return (
       <Box className="cart empty">
@@ -169,101 +163,121 @@ const Cart = ({ products, items = [], handleQuantity }) => {
 
   return (
     <>
-      <Box className="cart">
-        {/* TODO: CRIO_TASK_MODULE_CART - Display view for each cart item with non-zero quantity */}
-
-        <Box
-          display="flex"
-          alignItems="flex-start"
-          padding="1rem"
-          sx={{ flexDirection: "column" }}
-        >
-          {items.map((item, index) => {
-            return (
-              <Grid key={index}>
-                <Box className="image-container">
-                  <img
-                    // Add product image
-                    src={item.image}
-                    // Add product name as alt eext
-                    alt={item.name}
-                    width="100%"
-                    height="100%"
-                  />
-                </Box>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="space-between"
-                  height="6rem"
-                  paddingX="1rem"
-                >
-                  <div>{item.name}</div>
+      {!isReadOnly ? (
+        <Box className="cart">
+          {/* TODO: CRIO_TASK_MODULE_CART - Display view for each cart item with non-zero quantity */}
+          <Box
+            display="flex"
+            alignItems="flex-start"
+            padding="1rem"
+            sx={{ flexDirection: "column" }}
+          >
+            {items.map((item, index) => {
+              return (
+                <Grid key={index}>
+                  <Box className="image-container">
+                    <img
+                      // Add product image
+                      src={item.image}
+                      // Add product name as alt eext
+                      alt={item.name}
+                      width="100%"
+                      height="100%"
+                    />
+                  </Box>
                   <Box
                     display="flex"
+                    flexDirection="column"
                     justifyContent="space-between"
-                    alignItems="center"
+                    height="6rem"
+                    paddingX="1rem"
                   >
-                    <ItemQuantity
-                      Add
-                      required
-                      props
-                      by
-                      checking
-                      implementation
-                      handleAdd={async () => {
-                        await handleQuantity(item.productId, item.qty + 1);
-                      }}
-                      handleDelete={async () => {
-                        await handleQuantity(item.productId, item.qty - 1);
-                      }}
-                      value={item.qty}
-                    />
-                    <Box padding="0.5rem" fontWeight="700">
-                      ${item.cost}
+                    <div>{item.name}</div>
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <ItemQuantity
+                        Add
+                        required
+                        props
+                        by
+                        checking
+                        implementation
+                        handleAdd={async () => {
+                          await handleQuantity(item.productId, item.qty + 1);
+                        }}
+                        handleDelete={async () => {
+                          await handleQuantity(item.productId, item.qty - 1);
+                        }}
+                        value={item.qty}
+                      />
+                      <Box padding="0.5rem" fontWeight="700">
+                        ${item.cost}
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              </Grid>
-            );
-          })}
-        </Box>
-
-        <Box
-          padding="1rem"
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Box color="#3C3C3C" alignSelf="center">
-            Order total
+                </Grid>
+              );
+            })}
           </Box>
           <Box
-            color="#3C3C3C"
-            fontWeight="700"
-            fontSize="1.5rem"
-            alignSelf="center"
-            data-testid="cart-total"
+            padding="1rem"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            ${getTotalCartValue(items)}
+            <Box color="#3C3C3C" alignSelf="center">
+              Order total
+            </Box>
+            <Box
+              color="#3C3C3C"
+              fontWeight="700"
+              fontSize="1.5rem"
+              alignSelf="center"
+              data-testid="cart-total"
+            >
+              ${getTotalCartValue(items)}
+            </Box>
+          </Box>
+          <Box display="flex" justifyContent="flex-end" className="cart-footer">
+            <Button
+              color="primary"
+              variant="contained"
+              startIcon={<ShoppingCart />}
+              className="checkout-btn"
+              onClick={() => {
+                history.push("/checkout");
+                console.log("Checked out succesfully");
+              }}
+            >
+              Checkout
+            </Button>
           </Box>
         </Box>
-
-        <Box display="flex" justifyContent="flex-end" className="cart-footer">
-          <Button
-            color="primary"
-            variant="contained"
-            startIcon={<ShoppingCart />}
-            className="checkout-btn"
-            onClick={() => {
-              history.push("/checkout");
-              console.log("Checked out succesfully");
-            }}
+      ) : (
+        items.map((products) => (
+          <Box 
+            display="flex"
+            className="cart-item-box"
+            alignItems="flex-start"
+            padding="1rem"
           >
-            Checkout
-          </Button>
-        </Box>
-      </Box>
+            <Box className="image-container">
+              <img
+                src={products.image}
+                alt={products.name}
+                width="100%"
+                height="100%"
+              />
+              <Box>{products.name}</Box>
+              <Box>Qty: {products.qty}</Box>
+              <Box fontWeight="700">${products.cost}</Box>
+            </Box>
+          </Box>
+        ))
+      )}
     </>
   );
 };
