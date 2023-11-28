@@ -376,7 +376,6 @@ const Checkout = () => {
    *
    */
 
-  
   const performCheckout = async (token, items, addresses) => {};
 
   // TODO: CRIO_TASK_MODULE_CHECKOUT - Fetch addressses if logged in, otherwise show info message and redirect to Products page
@@ -465,7 +464,7 @@ const Checkout = () => {
         <Grid item xs={12} md={3} bgcolor="#E9F5E1">
           <Cart isReadOnly products={products} items={items} />
           <Box p={1}>
-            <Grid item bgcolor="#ffffff">
+            <Grid padding="1rem" item bgcolor="#ffffff">
               <Typography variant="h4" fontWeight="800">
                 Order Details
               </Typography>
@@ -473,17 +472,23 @@ const Checkout = () => {
               <Table>
                 <tr>
                   <td>Products</td>
-                  <td>{getTotalItems(items)}</td>
+                  <td>
+                    <Box textAlign="right">{getTotalItems(items)}</Box>
+                  </td>
                 </tr>
                 <br />
                 <tr>
                   <td>Subtotal</td>
-                  <td>${getTotalCartValue(items)}</td>
+                  <td>
+                    <Box textAlign="right">${getTotalCartValue(items)}</Box>
+                  </td>
                 </tr>
                 <br />
                 <tr>
                   <td>Shipping Charges</td>
-                  <td>$0</td>
+                  <td>
+                    <Box textAlign="right">$0</Box>
+                  </td>
                 </tr>
                 <br />
                 <tr>
@@ -491,7 +496,9 @@ const Checkout = () => {
                     <h3>Total</h3>
                   </td>
                   <td>
-                    <h3>${getTotalCartValue(items)}</h3>
+                    <h3>
+                      <Box textAlign="right"> ${getTotalCartValue(items)}</Box>
+                    </h3>
                   </td>
                 </tr>
               </Table>

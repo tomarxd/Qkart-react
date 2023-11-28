@@ -258,22 +258,38 @@ const Cart = ({ products, items = [], handleQuantity, isReadOnly = false }) => {
         </Box>
       ) : (
         items.map((products) => (
-          <Box 
-            display="flex"
-            className="cart-item-box"
-            alignItems="flex-start"
-            padding="1rem"
-          >
-            <Box className="image-container">
-              <img
-                src={products.image}
-                alt={products.name}
-                width="100%"
-                height="100%"
-              />
-              <Box>{products.name}</Box>
-              <Box>Qty: {products.qty}</Box>
-              <Box fontWeight="700">${products.cost}</Box>
+          <Box>
+            <Box
+              key={products._id}
+              display="flex"
+              alignItems="flex-start"
+              padding="12px"
+            >
+              <Box className="image-container">
+                <img
+                  src={products.image}
+                  alt={products.name}
+                  width="100%"
+                  height="100%"
+                />
+              </Box>
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+                height="6rem"
+                paddingX="1rem"
+              >
+                <div>{products.name}</div>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Box>Qty:{products.qty}</Box>
+                  <Box padding="0.5rem" fontWeight="700"> ${products.cost}</Box>
+                </Box>
+              </Box>
             </Box>
           </Box>
         ))
