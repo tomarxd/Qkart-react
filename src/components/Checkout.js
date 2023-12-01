@@ -1,4 +1,4 @@
-import { CreditCard, Delete } from "@mui/icons-material";
+import { CreditCard, Delete, LogoDev } from "@mui/icons-material";
 import {
   Button,
   Divider,
@@ -365,7 +365,26 @@ const Checkout = () => {
    *    Whether validation passed or not
    *
    */
-  const validateRequest = (items, addresses) => {};
+  const validateRequest = (items, addresses) => {
+    const cartValue = getTotalCartValue(items);
+    const walletBalance = localStorage.getItem("balance");
+    if (cartValue > walletBalance) {
+      enqueueSnackbar(
+        "You do not have enough balance in your wallet for this purchase",
+        { variant: "warning" }
+      );
+    }
+    if (!addresses) {
+      enqueueSnackbar("Please add a new address before proceeding.", {
+        variant: "warning",
+      });
+    }
+    if (!addresses.selected) {
+      enqueueSnackbar("Please select one shipping address to proceed.", {
+        variant: "warning",
+      });
+    }
+  };
 
   // TODO: CRIO_TASK_MODULE_CHECKOUT
   /**
@@ -382,8 +401,8 @@ const Checkout = () => {
    *
    * @returns { Boolean }
    *    If checkout operation was successful
-   *
    * API endpoint - "POST /cart/checkout"
+   *
    *
    * Example for successful response from backend:
    * HTTP 200
@@ -400,7 +419,40 @@ const Checkout = () => {
    *
    */
 
-  const performCheckout = async (token, items, addresses) => {};
+  const performCheckout = async (token, items, addresses) => {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+
+    try {
+      const response = await axios.post(
+        `${config.endpoint}/cart/checkout`,
+        { addressId: addresses.selected },
+        { headers: headers }
+      );
+      console.log(response.data);
+
+      const walletBalance =
+        localStorage.getItem("wallet") - getTotalCartValue(items);
+      console.log(walletBalance);
+      localStorage["balance"] = walletBalance;
+      enqueueSnackbar("Order placed successfully", { variant: "success" });
+      history.push("/Thanks");
+
+      return response;
+    } catch (error) {
+      enqueueSnackbar(error.message, {
+        variant: "warning",
+      });
+    }
+
+    if (!token) {
+      enqueueSnackbar("You must be logged in to access checkout page", {
+        variant: "info",
+      });
+    }
+  };
 
   // TODO: CRIO_TASK_MODULE_CHECKOUT - Fetch addressses if logged in, otherwise show info message and redirect to Products page
 
@@ -415,6 +467,7 @@ const Checkout = () => {
         const cartDetails = await generateCartItemsFrom(cartData, productsData);
         setItems(cartDetails);
       }
+      const allAddress = getAddresses(token);
     };
     onLoadHandler();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -534,5 +587,4 @@ const Checkout = () => {
     </>
   );
 };
-
 export default Checkout;

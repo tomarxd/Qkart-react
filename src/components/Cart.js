@@ -4,7 +4,7 @@ import {
   ShoppingCart,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
-import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
+import { Button, Grid, IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -287,7 +287,10 @@ const Cart = ({ products, items = [], handleQuantity, isReadOnly = false }) => {
                   alignItems="center"
                 >
                   <Box>Qty:{products.qty}</Box>
-                  <Box padding="0.5rem" fontWeight="700"> ${products.cost}</Box>
+                  <Box padding="0.5rem" fontWeight="700">
+                    {" "}
+                    ${products.cost}
+                  </Box>
                 </Box>
               </Box>
             </Box>
