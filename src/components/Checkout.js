@@ -202,6 +202,7 @@ const Checkout = () => {
       });
 
       setAddresses({ ...addresses, all: response.data });
+      console.log(addresses)
       console.log(response.data);
       return response.data;
     } catch {
@@ -261,8 +262,9 @@ const Checkout = () => {
         { address: newAddress },
         { headers: headers }
       );
-      console.log(response);
+      console.log(response.data);
       setAddresses({ ...addAddress, all: response.data });
+      setNewAddress({ isAddingNewAddress: false, value: "", });
       return response;
     } catch (e) {
       if (e.response) {
@@ -490,9 +492,20 @@ const Checkout = () => {
             <Divider />
             <Box>
               {/* TODO: CRIO_TASK_MODULE_CHECKOUT - Display list of addresses and corresponding "Delete" buttons, if present, of which 1 can be selected */}
-              <Typography my="1rem">
-                No addresses found for this account. Please add one to proceed
-              </Typography>
+              {addresses.all.length ? (
+                addresses.all.map((addre) => (
+                  <Box 
+                  onClick={()=>{setAddresses({...addresses, selected: addre._id})}}
+                  className={addresses.selected === addre._id ? "address-item selected" : "address-item not-selected"}
+                  value={addre._id} key={addre._id}>
+                    <Typography>{addre.address}</Typography>
+                  </Box>
+                ))
+              ) : (
+                <Typography my="1rem">
+                  No addresses found for this account. Please add one to proceed
+                </Typography>
+              )}
             </Box>
 
             {/* TODO: CRIO_TASK_MODULE_CHECKOUT - Dislay either "Add new address" button or the <AddNewAddressView> component to edit the currently selected address */}
