@@ -202,6 +202,7 @@ const Checkout = () => {
       });
 
       setAddresses({ ...addresses, all: response.data });
+      console.log(response.data);
       return response.data;
     } catch {
       enqueueSnackbar(
@@ -251,6 +252,18 @@ const Checkout = () => {
   const addAddress = async (token, newAddress) => {
     try {
       // TODO: CRIO_TASK_MODULE_CHECKOUT - Add new address to the backend and display the latest list of addresses
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+      const response = await axios.post(
+        `${config.endpoint}/user/addresses`,
+        { address: newAddress },
+        { headers: headers }
+      );
+      console.log(response);
+      setAddresses({ ...addAddress, all: response.data });
+      return response;
     } catch (e) {
       if (e.response) {
         enqueueSnackbar(e.response.data.message, { variant: "error" });
@@ -302,6 +315,17 @@ const Checkout = () => {
   const deleteAddress = async (token, addressId) => {
     try {
       // TODO: CRIO_TASK_MODULE_CHECKOUT - Delete selected address from the backend and display the latest list of addresses
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+      const response = await axios.delete(
+        `${config.endpoint}/user/addresses/:${addressId}`,
+        { headers: headers }
+      );
+      console.log(response);
+      setAddresses({ ...addAddress, all: response.data });
+      return response;
     } catch (e) {
       if (e.response) {
         enqueueSnackbar(e.response.data.message, { variant: "error" });

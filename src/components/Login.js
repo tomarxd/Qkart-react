@@ -59,7 +59,7 @@ const Login = () => {
 
   const loginUrl = config.endpoint + "/auth/login";
 
-  const login = async (formData) => {
+  const login = async () => {
     setLoading(true);
     if (validateInput(data)) {
       await axios
