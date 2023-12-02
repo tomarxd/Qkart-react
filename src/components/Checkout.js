@@ -1,4 +1,4 @@
-import { CreditCard, Delete, LogoDev } from "@mui/icons-material";
+import { CreditCard, Delete } from "@mui/icons-material";
 import {
   Button,
   Divider,
@@ -101,10 +101,27 @@ const AddNewAddressView = ({
         multiline
         minRows={4}
         placeholder="Enter your complete address"
+        onChange={(e) => {
+          newAddress.value = e.target.value;
+        }}
       />
       <Stack direction="row" my="1rem">
-        <Button variant="contained">Add</Button>
-        <Button variant="text">Cancel</Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            addAddress(token, newAddress.value);
+          }}
+        >
+          Add
+        </Button>
+        <Button
+          variant="text"
+          onClick={() => {
+            handleNewAddress({ isAddingNewAddress: false, value: "" });
+          }}
+        >
+          Cancel
+        </Button>
       </Stack>
     </Box>
   );
@@ -202,7 +219,7 @@ const Checkout = () => {
       });
 
       setAddresses({ ...addresses, all: response.data });
-      console.log(addresses)
+      console.log(addresses);
       console.log(response.data);
       return response.data;
     } catch {
@@ -264,7 +281,7 @@ const Checkout = () => {
       );
       console.log(response.data);
       setAddresses({ ...addAddress, all: response.data });
-      setNewAddress({ isAddingNewAddress: false, value: "", });
+      setNewAddress({ isAddingNewAddress: false, value: "" });
       return response;
     } catch (e) {
       if (e.response) {
@@ -322,11 +339,11 @@ const Checkout = () => {
         Authorization: `Bearer ${token}`,
       };
       const response = await axios.delete(
-        `${config.endpoint}/user/addresses/:${addressId}`,
+        `${config.endpoint}/user/addresses/${addressId}`,
         { headers: headers }
       );
       console.log(response);
-      setAddresses({ ...addAddress, all: response.data });
+      setAddresses({ ...addresses, all: response.data });
       return response;
     } catch (e) {
       if (e.response) {
@@ -494,11 +511,27 @@ const Checkout = () => {
               {/* TODO: CRIO_TASK_MODULE_CHECKOUT - Display list of addresses and corresponding "Delete" buttons, if present, of which 1 can be selected */}
               {addresses.all.length ? (
                 addresses.all.map((addre) => (
-                  <Box 
-                  onClick={()=>{setAddresses({...addresses, selected: addre._id})}}
-                  className={addresses.selected === addre._id ? "address-item selected" : "address-item not-selected"}
-                  value={addre._id} key={addre._id}>
-                    <Typography>{addre.address}</Typography>
+                  <Box
+                    onClick={() => {
+                      setAddresses({ ...addresses, selected: addre._id });
+                    }}
+                    className={
+                      addresses.selected === addre._id
+                        ? "address-item selected"
+                        : "address-item not-selected"
+                    }
+                    value={addre._id}
+                    key={addre._id}
+                  >
+                    <Typography>{addre.address} </Typography>
+                    <Button
+                      onClick={() => {
+                        deleteAddress(token, addre._id);
+                      }}
+                      startIcon={<Delete />}
+                    >
+                      DELETE
+                    </Button>
                   </Box>
                 ))
               ) : (
@@ -509,26 +542,30 @@ const Checkout = () => {
             </Box>
 
             {/* TODO: CRIO_TASK_MODULE_CHECKOUT - Dislay either "Add new address" button or the <AddNewAddressView> component to edit the currently selected address */}
-            <Button
-              color="primary"
-              variant="contained"
-              id="add-new-btn"
-              size="large"
-              onClick={() => {
-                setNewAddress((currNewAddress) => ({
-                  ...currNewAddress,
-                  isAddingNewAddress: true,
-                }));
-              }}
-            >
-              Add new address
-            </Button>
-            <AddNewAddressView
-              token={token}
-              newAddress={newAddress}
-              handleNewAddress={setNewAddress}
-              addAddress={addAddress}
-            />
+
+            {newAddress.isAddingNewAddress ? (
+              <AddNewAddressView
+                token={token}
+                newAddress={newAddress}
+                handleNewAddress={setNewAddress}
+                addAddress={addAddress}
+              />
+            ) : (
+              <Button
+                color="primary"
+                variant="contained"
+                id="add-new-btn"
+                size="large"
+                onClick={() => {
+                  setNewAddress((currNewAddress) => ({
+                    ...currNewAddress,
+                    isAddingNewAddress: true,
+                  }));
+                }}
+              >
+                Add new address
+              </Button>
+            )}
 
             <Typography color="#3C3C3C" variant="h4" my="1rem">
               Payment
