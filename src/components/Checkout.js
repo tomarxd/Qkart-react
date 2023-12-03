@@ -385,6 +385,7 @@ const Checkout = () => {
    *
    */
   const validateRequest = (items, addresses) => {
+    let passed = true;
     const cartValue = getTotalCartValue(items);
     const walletBalance = localStorage.getItem("balance");
     if (cartValue > walletBalance) {
@@ -392,17 +393,19 @@ const Checkout = () => {
         "You do not have enough balance in your wallet for this purchase",
         { variant: "warning" }
       );
-    }
-    if (!addresses) {
+      passed = false;
+    } else if (!addresses) {
       enqueueSnackbar("Please add a new address before proceeding.", {
         variant: "warning",
       });
-    }
-    if (!addresses.selected) {
+      passed = false;
+    } else if (!addresses.selected) {
       enqueueSnackbar("Please select one shipping address to proceed.", {
         variant: "warning",
       });
+      passed = false;
     }
+    return passed;
   };
 
   // TODO: CRIO_TASK_MODULE_CHECKOUT
@@ -439,37 +442,42 @@ const Checkout = () => {
    */
 
   const performCheckout = async (token, items, addresses) => {
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
+    const validated = validateRequest(items, addresses);
+    console.log(validated);
 
-    try {
-      const response = await axios.post(
-        `${config.endpoint}/cart/checkout`,
-        { addressId: addresses.selected },
-        { headers: headers }
-      );
-      console.log(response.data);
+    if (validated) {
+      try {
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        };
 
-      const walletBalance =
-        localStorage.getItem("wallet") - getTotalCartValue(items);
-      console.log(walletBalance);
-      localStorage["balance"] = walletBalance;
-      enqueueSnackbar("Order placed successfully", { variant: "success" });
-      history.push("/Thanks");
+        const response = await axios.post(
+          `${config.endpoint}/cart/checkout`,
+          { addressId: addresses.selected },
+          { headers: headers }
+        );
+        console.log(response.data);
 
-      return response;
-    } catch (error) {
-      enqueueSnackbar(error.message, {
-        variant: "warning",
-      });
-    }
+        const walletBalance =
+          localStorage.getItem("balance") - getTotalCartValue(items);
+        console.log(walletBalance);
+        localStorage["balance"] = walletBalance;
+        enqueueSnackbar("Order placed successfully", { variant: "success" });
+        history.push("/Thanks");
 
-    if (!token) {
-      enqueueSnackbar("You must be logged in to access checkout page", {
-        variant: "info",
-      });
+        return response;
+      } catch (error) {
+        enqueueSnackbar(error.message, {
+          variant: "warning",
+        });
+      }
+
+      if (!token) {
+        enqueueSnackbar("You must be logged in to access checkout page", {
+          variant: "info",
+        });
+      }
     }
   };
 
@@ -583,7 +591,13 @@ const Checkout = () => {
               </Typography>
             </Box>
 
-            <Button startIcon={<CreditCard />} variant="contained">
+            <Button
+              onClick={() => {
+                performCheckout(token, items, addresses);
+              }}
+              startIcon={<CreditCard />}
+              variant="contained"
+            >
               PLACE ORDER
             </Button>
           </Box>
