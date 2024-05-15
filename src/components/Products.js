@@ -374,6 +374,9 @@ const Products = () => {
                 </div>
                 <div>
                   <Typography>Loading Products...</Typography>
+                  <Typography>
+                    (Might take upto a minute if backend is cold booting)
+                  </Typography>
                 </div>
               </div>
             ) : card.length > 0 ? (
