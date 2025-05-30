@@ -24,7 +24,6 @@ import Footer from "./Footer";
 import Header from "./Header";
 import PayPalButton from "./PayPalButton";
 
-
 const AddNewAddressView = ({
   token,
   newAddress,
@@ -224,8 +223,6 @@ const Checkout = () => {
 
   const performCheckout = async (token, items, addresses) => {
     const validated = validateRequest(items, addresses);
-    console.log(validated);
-
     if (validated) {
       try {
         const headers = {
@@ -238,15 +235,14 @@ const Checkout = () => {
           { addressId: addresses.selected },
           { headers: headers }
         );
-        console.log(response.data);
-
+        // Clear frontend cart state after successful checkout
+        setItems([]);
         const walletBalance =
           localStorage.getItem("balance") - getTotalCartValue(items);
         console.log(walletBalance);
         localStorage["balance"] = walletBalance;
         enqueueSnackbar("Order placed successfully", { variant: "success" });
         history.push("/Thanks");
-
         return response;
       } catch (error) {
         enqueueSnackbar(error.message, {
@@ -373,16 +369,11 @@ const Checkout = () => {
               sandbox right now. PayPal will automatically start transferring
               your funds to your preferred bank account.
             </Typography>
-            <Button
-              type="hidden"
-              name="upload"
-              value="1"
-              my="2rem"
-              onClick={() => {
-                performCheckout(token, items, addresses);
-              }}
-            >
+            <Button type="hidden" name="upload" value="1" my="2rem">
               <PayPalButton
+                onClick={() => {
+                  performCheckout(token, items, addresses);
+                }}
                 amount={getTotalCartValue(items).toFixed(2)}
                 disabled={!addresses.selected}
               />
