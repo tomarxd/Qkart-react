@@ -1,8 +1,8 @@
 import { PayPalButtons } from "@paypal/react-paypal-js";
-import { useHistory } from "react-router-dom"; // Add this import
+import { useHistory } from "react-router-dom";
 
 const PayPalButton = ({ amount, disabled }) => {
-  const history = useHistory(); // Add this line
+  const history = useHistory();
 
   return (
     <div
@@ -31,7 +31,7 @@ const PayPalButton = ({ amount, disabled }) => {
           if (disabled) return;
           return actions.order.capture().then((details) => {
             localStorage.removeItem("cart");
-            history.push("/Thanks"); // Redirect instead of alert
+            history.push("/Thanks");
           });
         }}
         onError={(err) => {

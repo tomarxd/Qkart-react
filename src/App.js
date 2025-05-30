@@ -8,15 +8,11 @@ import Thanks from "./components/Thanks";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 export const config = {
-  endpoint: `http://${ipConfig.workspaceIp}:8082/api/v1`,
+  endpoint: `https://qkart-backend-lgkr.onrender.com/api/v1`,
 };
-// export const config = {
-//   endpoint: `https://qkart-backend-lgkr.onrender.com/api/v1`,
-// };
 function App() {
   return (
     <div className="App">
-      {/* TODO: CRIO_TASK_MODULE_LOGIN - To add configure routes and their mapping */}
       <PayPalScriptProvider
         options={{
           "client-id": process.env.REACT_APP_CLIENT_ID,
