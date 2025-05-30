@@ -9,7 +9,7 @@ import {
 import { Box } from "@mui/system";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { config } from "../App";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -178,7 +178,6 @@ const Products = () => {
       performAPICall();
       console.log(products);
       if (token) {
-        // fetchCart(token);
         const cartDetails = await fetchCart(token);
         console.log(cartDetails);
         setCartItems(cartDetails);
@@ -329,7 +328,6 @@ const Products = () => {
           }}
           placeholder="Search for items/categories"
           name="search"
-          // onChange={(text) => {performSearch(text.target.value);}}
           onChange={(e) => {
             debounceSearch(e.target.value, timerId);
           }}

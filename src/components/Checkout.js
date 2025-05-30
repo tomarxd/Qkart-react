@@ -11,7 +11,7 @@ import {
 import { Box } from "@mui/system";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { config } from "../App";
 import Cart, {
@@ -22,6 +22,7 @@ import Cart, {
 import "./Checkout.css";
 import Footer from "./Footer";
 import Header from "./Header";
+import PayPalButton from "./PayPalButton";
 
 // Definition of Data Structures used
 /**
@@ -88,6 +89,8 @@ import Header from "./Header";
  *    JSX for the Add new address view
  *
  */
+
+const totalAmount = 49.99;
 
 const AddNewAddressView = ({
   token,
@@ -591,14 +594,27 @@ const Checkout = () => {
               </Typography>
             </Box>
 
+            <Typography
+              variant="body2"
+              sx={{ color: "#388e3c", fontSize: "1rem", marginY: "1rem" }}
+            >
+              If payment fails, transfers of funds isn't available in PayPal
+              sandbox right now. PayPal will automatically start transferring
+              your funds to your preferred bank account.
+            </Typography>
             <Button
+              type="hidden"
+              name="upload"
+              value="1"
+              my="2rem"
               onClick={() => {
                 performCheckout(token, items, addresses);
               }}
-              startIcon={<CreditCard />}
-              variant="contained"
             >
-              PLACE ORDER
+              <PayPalButton
+                amount={getTotalCartValue(items).toFixed(2)}
+                disabled={!addresses.selected}
+              />
             </Button>
           </Box>
         </Grid>
